@@ -46,7 +46,7 @@ export default function EventCarousel({ events, autoSlide = true, interval = 500
 
   return (
     <div className="relative">
-      <div className="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-2xl">
+  <div className="overflow-hidden rounded border border-corporate-border bg-surface shadow-lg">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -66,25 +66,23 @@ export default function EventCarousel({ events, autoSlide = true, interval = 500
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
-                <div className="absolute top-4 left-4 bg-corporate-lightBlue text-white px-4 py-2 rounded-lg shadow-lg">
-                  <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold mb-1">
-                    {events[currentIndex].category}
-                  </span>
+                <div className="absolute top-4 left-4 bg-corporate-blue text-white px-3 py-1 text-xs font-semibold">
+                  {events[currentIndex].category}
                 </div>
               </div>
 
-              <div className="p-8 md:p-12 flex flex-col justify-center bg-white dark:bg-gray-800">
-                <div className="flex items-center gap-3 mb-4 text-corporate-lightBlue dark:text-blue-400">
+              <div className="p-8 md:p-12 flex flex-col justify-center bg-corporate-background dark:bg-gray-800">
+                <div className="flex items-center gap-3 mb-4 text-corporate-textSecondary dark:text-gray-400">
                   <Calendar className="w-5 h-5" />
-                  <span className="text-lg font-semibold">{events[currentIndex].date}</span>
+                  <span className="text-sm font-semibold uppercase tracking-wide">{events[currentIndex].date}</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold text-corporate-blue dark:text-white mb-4 font-heading">
+                <h3 className="text-2xl md:text-3xl font-bold text-corporate-navy dark:text-white mb-4">
                   {events[currentIndex].title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-6">
+                <p className="text-muted leading-relaxed mb-6">
                   {events[currentIndex].description}
                 </p>
-                <button className="inline-flex items-center gap-2 px-6 py-3 bg-corporate-lightBlue text-white rounded-lg hover:bg-corporate-blue transition-colors w-fit font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                <button className="inline-flex items-center gap-2 px-6 py-3 bg-corporate-blue text-white hover:bg-opacity-90 transition-colors w-fit font-semibold">
                   Learn More
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -95,7 +93,7 @@ export default function EventCarousel({ events, autoSlide = true, interval = 500
 
         <button
           onClick={goToPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 text-corporate-blue dark:text-white p-3 rounded-full shadow-xl hover:bg-white dark:hover:bg-gray-700 transition-all hover:scale-110 z-10"
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-card text-corporate-navy dark:text-white p-3 border border-corporate-border shadow-md hover:shadow-lg transition-shadow z-10"
           aria-label="Previous event"
         >
           <ChevronLeft className="w-6 h-6" />
@@ -103,22 +101,22 @@ export default function EventCarousel({ events, autoSlide = true, interval = 500
 
         <button
           onClick={goToNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 text-corporate-blue dark:text-white p-3 rounded-full shadow-xl hover:bg-white dark:hover:bg-gray-700 transition-all hover:scale-110 z-10"
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-card text-corporate-navy dark:text-white p-3 border border-corporate-border shadow-md hover:shadow-lg transition-shadow z-10"
           aria-label="Next event"
         >
           <ChevronRight className="w-6 h-6" />
         </button>
       </div>
 
-      <div className="flex justify-center gap-3 mt-6">
+      <div className="flex justify-center gap-2 mt-6">
         {events.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`h-2 rounded-full transition-all ${
+            className={`h-1.5 transition-all ${
               index === currentIndex
-                ? 'w-8 bg-corporate-lightBlue dark:bg-blue-400'
-                : 'w-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                ? 'w-6 bg-corporate-blue'
+                : 'w-1.5 bg-corporate-border hover:bg-corporate-textSecondary'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

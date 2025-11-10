@@ -1,193 +1,145 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
+import Image from 'next/image'; // Import Image component
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { navigationItems, MenuItem } from '@/lib/navigation';
 
-const topLinks = [
-  { name: 'Circular Notification', href: '/notifications' },
-  { name: 'Upcoming Events', href: '/events' },
-  { name: 'Feedback', href: '/feedback' },
-  { name: 'News Bulletin', href: '/news' },
-  { name: 'Career Opportunities', href: '/careers' },
-];
+const NavLink = ({ item, onClick }: { item: MenuItem; onClick: () => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-const navLinks = [
-  { name: 'Home', href: '/' },
-  {
-    name: 'About',
-    href: '/about',
-    submenu: [
-      { name: 'Vision & Mission', href: '/about#vision' },
-      { name: 'Management', href: '/about#management' },
-      { name: 'Infrastructure', href: '/about#infrastructure' },
-    ],
-  },
-  { name: 'Governance', href: '/governance' },
-  { name: 'Admissions', href: '/admissions' },
-  { name: 'Academics', href: '/academics' },
-  { name: 'Institute Innovation Council', href: '/iic' },
-  { name: 'Industry Connect', href: '/industry' },
-  { name: 'CDC', href: '/cdc' },
-  { name: 'Quick Links', href: '/quick-links' },
-];
+  const handleToggle = (e: React.MouseEvent) => {
+    if (item.submenu) {
+      e.preventDefault();
+      setIsOpen(!isOpen);
+    } else {
+      onClick();
+    }
+  };
+
+  return (
+    <div className="relative">
+      <Link
+        href={item.href}
+        onClick={handleToggle}
+        className="flex items-center justify-between px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700"
+      >
+        {item.name}
+        {item.submenu && <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />}
+      </Link>
+      {item.submenu && isOpen && (
+        <div className="pl-4">
+          {item.submenu.map((subItem) => (
+            <NavLink key={subItem.name} item={subItem} onClick={onClick} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [openDesktopMenu, setOpenDesktopMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
 
-  const toggleTheme = () => {
-    const html = document.documentElement;
-    const isDark = html.classList.contains('dark');
-    html.classList.toggle('dark', !isDark);
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  const toggleDesktopMenu = (name: string) => {
+    setOpenDesktopMenu(openDesktopMenu === name ? null : name);
   };
 
-  const isDark = mounted && typeof window !== 'undefined' && document.documentElement.classList.contains('dark');
-
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+        setOpenDesktopMenu(null);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white dark:bg-gray-900 shadow-lg'
-          : 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm'
-      }`}
-    >
-      {/* Top Header */}
-      <div className="bg-corporate-blue dark:bg-gray-800 text-white py-2 hidden lg:block">
-        <div className="section-container">
-          <div className="flex items-center justify-between text-sm">
-            <div className="font-bold tracking-wide">NSRIET</div>
-            <div className="flex items-center gap-1">
-              {topLinks.map((link, index) => (
-                <div key={link.name} className="flex items-center">
-                  <Link
-                    href={link.href}
-                    className="hover:text-blue-200 transition-colors px-2"
-                  >
-                    {link.name}
-                  </Link>
-                  {index < topLinks.length - 1 && (
-                    <span className="text-blue-300">|</span>
-                  )}
-                </div>
-              ))}
-            </div>
+    <nav ref={navRef} className="relative z-40 bg-gradient-to-r from-corporate-navy to-corporate-blue text-white shadow-lg">
+      <div className="bg-corporate-dark border-b-[3px] border-corporate-blue">
+        <div className="section-container py-2 flex justify-between items-center text-sm text-white">
+          <div>
+            <span className="font-bold">NSRIET</span>
+          </div>
+          <div className="hidden lg:flex items-center space-x-4">
+            <Link href="#" className="hover:text-corporate-lightBlue">Circular Notification</Link>
+            <span>|</span>
+            <Link href="#" className="hover:text-corporate-lightBlue">Upcoming Events</Link>
+            <span>|</span>
+            <Link href="/quick-links/feedback" className="hover:text-corporate-lightBlue">Feedback</Link>
+            <span>|</span>
+            <Link href="#" className="hover:text-corporate-lightBlue">News Bulletin</Link>
+            <span>|</span>
+            <Link href="/cdc/career-guidance" className="hover:text-corporate-lightBlue">Career Opportunities</Link>
           </div>
         </div>
       </div>
+      {/* Logo at the top */}
+      <div className="pt-[10px] pb-3">
+        <Link href="/">
+          <div className="relative h-20 w-full">
+            <Image src="/main-logo1.png" alt="NSRIET Logo" fill className="object-cover" />
+          </div>
+        </Link>
+      </div>
 
-      {/* Main Header */}
-      <div className="section-container py-4">
+      <div className="section-container pt-[6px] pb-2 relative">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/main-logo1.png"
-              alt="NSRIET Logo"
-              width={60}
-              height={60}
-              className="object-contain"
-              priority
-            />
-            <div className="hidden md:block">
-              <h1 className="text-xl font-bold text-corporate-blue dark:text-white">
-                NSRIET
-              </h1>
-              <p className="text-xs text-gray-600 dark:text-gray-300">
-                Excellence in Education
-              </p>
-            </div>
-          </Link>
-
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6">
-            {navLinks.map((link) => (
+          <div className="hidden lg:flex items-center gap-0.5">
+            {navigationItems.map((item) => (
               <div
-                key={link.name}
-                className="relative group"
-                onMouseEnter={() =>
-                  link.submenu && setActiveSubmenu(link.name)
-                }
-                onMouseLeave={() => setActiveSubmenu(null)}
+                key={item.name}
+                className="relative"
+                onMouseEnter={() => item.submenu && toggleDesktopMenu(item.name)}
+                onMouseLeave={() => item.submenu && toggleDesktopMenu('')}
               >
-                <Link
-                  href={link.href}
-                  className="text-gray-700 dark:text-gray-200 hover:text-corporate-lightBlue dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-1"
-                >
-                  {link.name}
-                  {link.submenu && <ChevronDown className="w-4 h-4" />}
+                <Link href={item.href} className="text-white hover:opacity-90 font-medium transition-all flex items-center gap-1 py-[7px] px-4 rounded-md hover:bg-white/10">
+                  {item.name}
+                  {item.submenu && <ChevronDown className={`w-4 h-4 transition-transform ${openDesktopMenu === item.name ? 'rotate-180' : ''}`} />}
                 </Link>
-                {link.submenu && activeSubmenu === link.name && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden min-w-[220px]"
-                  >
-                    {link.submenu.map((sublink) => (
-                      <Link
-                        key={sublink.name}
-                        href={sublink.href}
-                        className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        {sublink.name}
-                      </Link>
+                {item.submenu && openDesktopMenu === item.name && (
+                  <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden min-w-[280px] border border-gray-200 dark:border-gray-700">
+                    {item.submenu.map((subItem) => (
+                      <div key={subItem.name} className="relative group/submenu">
+                        <Link
+                          href={subItem.href}
+                          className="block px-5 py-3 text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors font-medium text-sm border-b border-gray-100 dark:border-gray-700 last:border-b-0 flex items-center justify-between"
+                        >
+                          {subItem.name}
+                           {subItem.submenu && <ChevronDown className="w-3 h-3 opacity-50 ml-2" />}
+                        </Link>
+                        {subItem.submenu && (
+                           <div className="absolute left-full top-0 ml-1 bg-white dark:bg-gray-800 shadow-lg rounded-md overflow-hidden min-w-[280px] border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover/submenu:opacity-100 group-hover/submenu:visible transition-all">
+                            {subItem.submenu.map((subSubItem) => (
+                              <Link
+                                key={subSubItem.name}
+                                href={subSubItem.href}
+                                className="block px-4 py-2.5 text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700"
+                              >
+                                {subSubItem.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ))}
-                  </motion.div>
+                  </div>
                 )}
               </div>
             ))}
-            
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {isDark ? (
-                <Sun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <Moon className="w-5 h-5 text-gray-700" />
-              )}
-            </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {isDark ? (
-                <Sun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <Moon className="w-5 h-5 text-gray-700" />
-              )}
-            </button>
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-gray-700 dark:text-gray-200"
-              aria-label="Toggle menu"
-            >
+          <div className="lg:hidden">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-white">
               {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
@@ -195,44 +147,15 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-700"
-          >
-            <div className="section-container py-4 space-y-2">
-              {navLinks.map((link) => (
-                <div key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="block py-2 text-gray-700 dark:text-gray-200 hover:text-corporate-lightBlue dark:hover:text-blue-400 font-medium"
-                    onClick={() => !link.submenu && setIsMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                  {link.submenu && (
-                    <div className="pl-4 space-y-1">
-                      {link.submenu.map((sublink) => (
-                        <Link
-                          key={sublink.name}
-                          href={sublink.href}
-                          className="block py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-corporate-lightBlue dark:hover:text-blue-400"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {sublink.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      {isMenuOpen && (
+        <div className="lg:hidden bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+          <div className="px-4 sm:px-6 py-4 space-y-2">
+            {navigationItems.map((item) => (
+              <NavLink key={item.name} item={item} onClick={() => setIsMenuOpen(false)} />
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
   );
 }

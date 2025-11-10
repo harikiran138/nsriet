@@ -171,34 +171,40 @@ export default function QuickLinksPage() {
 
   return (
     <>
-      <section className="relative py-20 bg-gradient-to-br from-corporate-blue to-corporate-lightBlue dark:from-gray-900 dark:to-blue-900 text-white">
-        <div className="section-container">
+      <section className="relative py-24 md:py-32 bg-gradient-to-br from-corporate-navy via-blue-900 to-corporate-dark text-white overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        
+        <div className="section-container px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+              <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">
                 <LinkIcon className="w-12 h-12" />
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-6">Quick Links</h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Easy access to all important resources and information
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Quick Links & Resources
+            </h1>
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Easy access to all important resources, portals, and information for students and staff
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-20 bg-white dark:bg-gray-800">
+  <section className="py-20 bg-card">
         <div className="section-container">
           <AnimatedSection>
             <div className="mb-12">
               <h2 className="text-4xl font-bold text-corporate-blue dark:text-white mb-4">
                 Student Resources
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-lg">
+              <p className="text-muted text-lg">
                 Essential tools and portals for students
               </p>
             </div>
@@ -210,7 +216,7 @@ export default function QuickLinksPage() {
                 <Link href={resource.link}>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all cursor-pointer h-full"
+                    className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 p-6 rounded-xl border border-base shadow-md hover:shadow-xl transition-all cursor-pointer h-full"
                   >
                     <div className={`w-14 h-14 bg-gradient-to-br ${resource.color} rounded-lg flex items-center justify-center text-white mb-4`}>
                       {resource.icon}
@@ -218,7 +224,7 @@ export default function QuickLinksPage() {
                     <h3 className="text-xl font-bold text-corporate-blue dark:text-white mb-2">
                       {resource.title}
                     </h3>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    <p className="text-muted text-sm">
                       {resource.description}
                     </p>
                   </motion.div>
@@ -229,14 +235,14 @@ export default function QuickLinksPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+  <section className="py-20 bg-surface">
         <div className="section-container">
           <AnimatedSection>
             <div className="mb-12">
               <h2 className="text-4xl font-bold text-corporate-blue dark:text-white mb-4">
                 Administrative
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-lg">
+              <p className="text-muted text-lg">
                 Important administrative services and information
               </p>
             </div>
@@ -248,7 +254,7 @@ export default function QuickLinksPage() {
                 <Link href={link.link}>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all cursor-pointer h-full"
+                    className="bg-card p-6 rounded-xl border border-base shadow-md hover:shadow-xl transition-all cursor-pointer h-full"
                   >
                     <div className={`w-14 h-14 bg-gradient-to-br ${link.color} rounded-lg flex items-center justify-center text-white mb-4`}>
                       {link.icon}
@@ -256,7 +262,7 @@ export default function QuickLinksPage() {
                     <h3 className="text-xl font-bold text-corporate-blue dark:text-white mb-2">
                       {link.title}
                     </h3>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    <p className="text-muted text-sm">
                       {link.description}
                     </p>
                   </motion.div>
@@ -267,7 +273,7 @@ export default function QuickLinksPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white dark:bg-gray-800">
+  <section className="py-20 bg-card">
         <div className="section-container">
           <AnimatedSection>
             <div className="mb-12">
@@ -286,7 +292,7 @@ export default function QuickLinksPage() {
                 <Link href={download.link}>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all cursor-pointer"
+                    className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 p-6 rounded-xl border border-base shadow-md hover:shadow-xl transition-all cursor-pointer"
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 bg-corporate-lightBlue dark:bg-blue-600 rounded-lg flex items-center justify-center text-white">
@@ -296,13 +302,13 @@ export default function QuickLinksPage() {
                         <h3 className="text-lg font-bold text-corporate-blue dark:text-white mb-1">
                           {download.title}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-muted">
                           {download.size}
                         </p>
                       </div>
                       <Download className="w-5 h-5 text-corporate-lightBlue dark:text-blue-400" />
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    <p className="text-muted text-sm">
                       {download.description}
                     </p>
                   </motion.div>
@@ -313,7 +319,7 @@ export default function QuickLinksPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+  <section className="py-20 bg-surface">
         <div className="section-container">
           <AnimatedSection>
             <div className="mb-12">
@@ -337,7 +343,7 @@ export default function QuickLinksPage() {
                 >
                   <motion.div
                     whileHover={{ x: 5 }}
-                    className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all flex items-center gap-3"
+                    className="bg-card p-4 rounded-lg border border-base shadow-sm hover:shadow-md transition-all flex items-center gap-3"
                   >
                     <div className="w-10 h-10 bg-corporate-lightBlue dark:bg-blue-600 rounded-lg flex items-center justify-center text-white">
                       {link.icon}

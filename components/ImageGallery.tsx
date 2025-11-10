@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface GalleryImage {
@@ -19,6 +19,26 @@ interface ImageGalleryProps {
 export default function ImageGallery({ images, columns = 3 }: ImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedImage(null);
+      }
+    };
+
+    if (selectedImage) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'auto';
+    };
+  }, [selectedImage]);
+
   const gridCols = {
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
@@ -29,13 +49,13 @@ export default function ImageGallery({ images, columns = 3 }: ImageGalleryProps)
     <>
       <div className={`grid ${gridCols[columns]} gap-6`}>
         {images.map((image, index) => (
-          <motion.div
+          <motion.button
             key={index}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
-            className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all cursor-pointer aspect-[4/3]"
+            className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all cursor-pointer aspect-[4/3] w-full"
             onClick={() => setSelectedImage(image)}
           >
             <Image
@@ -53,7 +73,7 @@ export default function ImageGallery({ images, columns = 3 }: ImageGalleryProps)
                 <p className="text-sm text-gray-200">{image.alt}</p>
               </div>
             </div>
-          </motion.div>
+          </motion.button>
         ))}
       </div>
 

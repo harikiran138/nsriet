@@ -23,7 +23,7 @@ export default function PartnerLogos({ partners, title, description }: PartnerLo
             {title}
           </h2>
           {description && (
-            <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+            <p className="text-muted text-lg max-w-2xl mx-auto">
               {description}
             </p>
           )}
@@ -38,7 +38,7 @@ export default function PartnerLogos({ partners, title, description }: PartnerLo
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.05, duration: 0.4 }}
-            className="group relative bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition-all transform hover:-translate-y-2"
+            className="group relative bg-card rounded-xl p-6 shadow-md hover:shadow-2xl transition-all transform hover:-translate-y-2"
           >
             <div className="relative h-24 grayscale group-hover:grayscale-0 transition-all duration-500">
               <Image
@@ -49,7 +49,7 @@ export default function PartnerLogos({ partners, title, description }: PartnerLo
                 sizes="(max-width: 768px) 50vw, 20vw"
               />
             </div>
-            <p className="text-center mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
+            <p className="text-center mt-4 text-sm font-semibold text-muted opacity-0 group-hover:opacity-100 transition-opacity">
               {partner.name}
             </p>
           </motion.div>

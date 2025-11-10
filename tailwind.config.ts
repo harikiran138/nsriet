@@ -24,21 +24,32 @@ const config: Config = {
           950: '#172554',
         },
         corporate: {
-          blue: '#003366',
-          lightBlue: '#0066cc',
-          gray: '#4a5568',
-          lightGray: '#f7fafc',
+          navy: '#003366',
+          blue: '#0066cc',
+          dark: '#001a33',
+          lightBlue: '#3399ff',
+          background: '#f8f9fa',
+          textPrimary: '#212529',
+          textSecondary: '#5a5a5a',
+          border: '#e4e7eb',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Roboto Slab', 'Roboto', 'serif'],
+        sans: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in',
         'slide-up': 'slideUp 0.6s ease-out',
         'slide-down': 'slideDown 0.6s ease-out',
         'ticker': 'ticker 30s linear infinite',
+        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+        'fade-in-down': 'fadeInDown 0.6s ease-out forwards',
+        'slide-in-left': 'slideInLeft 0.6s ease-out forwards',
+        'slide-in-right': 'slideInRight 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.6s ease-out forwards',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'bounce-slow': 'bounceSlowly 3s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -57,10 +68,62 @@ const config: Config = {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
+        fadeInUp: {
+          from: { opacity: '0', transform: 'translateY(20px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInDown: {
+          from: { opacity: '0', transform: 'translateY(-20px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideInLeft: {
+          from: { opacity: '0', transform: 'translateX(-30px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        slideInRight: {
+          from: { opacity: '0', transform: 'translateX(30px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        scaleIn: {
+          from: { opacity: '0', transform: 'scale(0.95)' },
+          to: { opacity: '1', transform: 'scale(1)' },
+        },
+        pulseSoft: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
+        bounceSlowly: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        slideInFromLeft: {
+          from: { opacity: '0', transform: 'translateX(-30px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        slideInFromRight: {
+          from: { opacity: '0', transform: 'translateX(30px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        fadeInScale: {
+          from: { opacity: '0', transform: 'scale(0.95)' },
+          to: { opacity: '1', transform: 'scale(1)' },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }: any) {
+      addUtilities({
+        '.scrollbar-hide': {
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        },
+      });
+    },
+  ],
 };
 
 export default config;
